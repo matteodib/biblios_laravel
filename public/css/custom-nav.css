@@ -229,5 +229,5 @@ body{
     cursor: pointer;
 }
 .bg-gray-100 {
-    background-color: unset;
+    background-color: unset !important;
 }
