@@ -228,3 +228,6 @@ body{
     border: none;
     cursor: pointer;
 }
+.bg-gray-100 {
+    background-color: unset;
+}
