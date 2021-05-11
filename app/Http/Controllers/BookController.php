@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Book;
 
 class BookController extends Controller
 {
@@ -14,7 +15,9 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        $book = new Book;
+        $books = $book->all();
+        return view('books.index', compact('books'));
     }
 
     /**
@@ -26,7 +29,8 @@ class BookController extends Controller
     {
         $autori = DB::table('authors')->get();
         $arg = DB::table('arguments')->get();
-        return view('books.create', compact('autori', 'arg'));
+        $editori = DB::table('publishers')->get();
+        return view('books.create', compact('autori', 'arg', 'editori'));
     }
 
     /**
@@ -37,7 +41,20 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $book = new Book;
+
+        $book->titolo = $request->titolo;
+        $book->anno_pubb = $request->anno_pubb;
+        $book->isbn = $request->isbn;
+        $book->trama = $request->trama;
+        $book->copertina = $request->copertina;
+        $book->copie = $request->copie;
+        $book->argomento_id = $request->argomento;
+        $book->editore_id = $request->editore;
+
+        $book->save();
+        $book->autori()->attach($request->autore);
+        return redirect('/books');
     }
 
     /**

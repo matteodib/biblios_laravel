@@ -8,6 +8,7 @@
             <img src="{{asset('images/book-png.png')}}">
         </div>
         <form method="post" action="{{route('books.store')}}">
+            @csrf
             <h3>Inserisci un libro</h3>
             <div class="row">
                 <div class="col-md-6">
@@ -21,7 +22,7 @@
                         <input type="number" name="isbn" class="form-control" placeholder="Isbn" value="" />
                     </div>
                     <div class="form-group">
-                        <input type="number" name="isbn" class="form-control" placeholder="Copie" value="" />
+                        <input type="number" name="copie" class="form-control" placeholder="Copie" value="" />
                     </div>
                     <div class="form-group">
                         <select name="argomento" class="form-control">
@@ -54,6 +55,9 @@
                     <div class="form-group">
                         <select name="editore" class="form-control">
                             <option value="0">Seleziona un Editore</option>
+                            @foreach($editori as $editore)
+                                <option value="{{$editore->id}}">{{$editore->nome}}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

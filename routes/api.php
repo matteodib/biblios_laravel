@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\Book;
+use App\Http\Controllers\ApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('/books', [ApiController::class, 'index']);
+Route::post('/add', [ApiController::class, 'store'])->middleware('auth:sanctum');
+Route::delete('/delete/{id}', [ApiController::class, 'destroy'])->middleware('auth:sanctum');
+Route::put('/put/{id}', [ApiController::class, 'put'])->middleware('auth:sanctum');
+Route::get('/book/{id}', [ApiController::class, 'show']);
+
+Route::post('/login', [ApiController::class, 'login']);

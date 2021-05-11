@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminBooksController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,4 +33,7 @@ Route::get('/admin', function(){
 })->middleware(['admin']);
 
 Route::resource('books', BookController::class);
+Route::resource('admin', AdminController::class);
+Route::resource('abooks', AdminBooksController::class);
+
 require __DIR__.'/auth.php';

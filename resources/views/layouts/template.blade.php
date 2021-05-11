@@ -55,10 +55,12 @@
             </li>
         </ul>
         <ul class="ml-auto mr-md-5">
-            <li class="nav-item" id="loginazzo">
+            @guest<li class="nav-item" id="loginazzo">
                 <a class="nav-link delay" href="/login"><i class="far fa-copy"></i>Registrati / Login</a>
-            </li>
-
+            </li>@endguest
+            @auth<li class="nav-item" id="loginazzo">
+                <a class="nav-link delay" href="/logout"><i class="far fa-copy"></i>Logout</a>
+            </li>@endauth
         </ul>
     </div>
 </nav>

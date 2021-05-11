@@ -9,6 +9,8 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrazioneMail;
 
 class RegisteredUserController extends Controller
 {
@@ -51,6 +53,8 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         User::find($user->id)->ruoli()->attach(2);
+
+        Mail::to(Auth::user()->email)->send(new RegistrazioneMail($user));
 
         return redirect(RouteServiceProvider::HOME);
     }
