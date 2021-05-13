@@ -28,9 +28,7 @@ class ApiController extends Controller
         return response($response, 201);
     }
     public function index() {
-        return Book::select('books.id', 'titolo', 'anno_pubb', 'isbn', 'trama', 'copertina', 'copie', 'arguments.argomento', 'publishers.nome')
-            ->join('arguments', 'books.argomento_id', '=', 'arguments.id' )
-            ->join('publishers', 'books.editore_id', '=', 'publishers.id')->get();
+        return Book::all();
     }
     public function store(Request $request) {
         $libro = new Book();

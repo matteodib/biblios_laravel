@@ -20,6 +20,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('/books', [ApiController::class, 'index']);
+Route::get('/arguments', [ApiController::class, 'arguments']);
+Route::get('/publishers', [ApiController::class, 'publishers']);
+
 Route::post('/add', [ApiController::class, 'store'])->middleware('auth:sanctum');
 Route::delete('/delete/{id}', [ApiController::class, 'destroy'])->middleware('auth:sanctum');
 Route::put('/put/{id}', [ApiController::class, 'put'])->middleware('auth:sanctum');
