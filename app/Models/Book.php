@@ -14,10 +14,10 @@ class Book extends Model
     public function editore() {
         return $this->belongsTo(Publisher::class);
     }
-    public function prestiti() {
-        return $this->belongsToMany(Loan::class);
-    }
     public function autori() {
         return $this->belongsToMany(Author::class, 'authors_books', 'libro_id', 'autore_id');
+    }
+    public function prestiti() {
+        return $this->belongsToMany(User::class, 'book_user');
     }
 }

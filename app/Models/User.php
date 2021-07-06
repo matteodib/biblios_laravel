@@ -12,11 +12,11 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
 
-    public function prestiti() {
-        return $this->belongsToMany(Loan::class);
-    }
     public function ruoli() {
         return $this->belongsToMany(Role::class, 'role_users', 'user_id', 'ruolo_id');
+    }
+    public function libro() {
+        return $this->belongsToMany(Book::class, 'book_user');
     }
     /**
      * The attributes that are mass assignable.

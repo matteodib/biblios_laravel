@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Argument;
-use App\Models\Author;
-use App\Models\Publisher;
 use Illuminate\Http\Request;
-use App\Models\Book;
+use App\Models\Author;
 
-class AdminBooksController extends Controller
+class AdminAuthorsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +14,8 @@ class AdminBooksController extends Controller
      */
     public function index()
     {
-        $book = new Book;
-        $books = $book->all();
-        return view('admin.books.index', compact('books'));
+        $autori = Author::all();
+        return view('admin.authors.index', compact('autori'));
     }
 
     /**
@@ -29,7 +25,7 @@ class AdminBooksController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.authors.create');
     }
 
     /**
@@ -40,7 +36,12 @@ class AdminBooksController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $autore = new Author;
+        $autore->nome = $request->nome;
+        $autore->cognome = $request->cognome;
+        $autore->sito_web = $request->sito_web;
+        $autore->save();
+        return redirect('/admin/authors');
     }
 
     /**
@@ -51,7 +52,6 @@ class AdminBooksController extends Controller
      */
     public function show($id)
     {
-        //
     }
 
     /**
@@ -62,11 +62,9 @@ class AdminBooksController extends Controller
      */
     public function edit($id)
     {
-        $book = Book::find($id);
-        $arg = Argument::all();
-        $autori = Author::all();
-        $editori = Publisher::all();
-        return view('admin.books.update', compact('arg', 'autori', 'editori', 'book'));
+        $autore = Author::find($id);
+        return view('admin.authors.update', compact('autore'));
+
     }
 
     /**
@@ -78,25 +76,12 @@ class AdminBooksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'copertina' => 'required',
-        ]);
-        $book = Book::find($id);
-        $book->titolo = $request->titolo;
-        $book->anno_pubb = $request->anno_pubb;
-        $book->isbn = $request->isbn;
-        $book->trama = $request->trama;
-        $book->copertina = $request->copertina;
-        $book->copie = $request->copie;
-        $book->argomento_id = $request->argomento;
-        $book->editore_id = $request->editore;
-        $book->autori()->detach();
-        foreach ($request->autori as $autore_id) {
-            $book->autori()->attach($autore_id);
-        }
-
-        $book->save();
-        return redirect('/admin/books');
+        $autore = Author::find($id);
+        $autore->nome = $request->nome;
+        $autore->cognome = $request->cognome;
+        $autore->sito_web = $request->sito_web;
+        $autore->save();
+        return redirect('/admin/authors');
     }
 
     /**
@@ -107,8 +92,8 @@ class AdminBooksController extends Controller
      */
     public function destroy($id)
     {
-        $book = Book::find($id);
-        $book->delete();
-        return redirect('/admin/books');
+        $autore = Author::find($id);
+        $autore->delete();
+        return redirect('/admin/authors');
     }
 }

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Argument;
 use App\Models\Author;
-use App\Models\Publisher;
-use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Models\Prestito;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
-class AdminBooksController extends Controller
+class AdminLoansController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +22,9 @@ class AdminBooksController extends Controller
     {
         $book = new Book;
         $books = $book->all();
-        return view('admin.books.index', compact('books'));
+        $prestiti = Prestito::all();
+        $users = User::all();
+        return view('admin.loans.index', compact( 'prestiti', 'users', 'books'));
     }
 
     /**
@@ -29,7 +34,10 @@ class AdminBooksController extends Controller
      */
     public function create()
     {
-        //
+        $prestiti = Prestito::all();
+        $books = Book::with('prestiti')->get();
+        $users = User::with('libro')->get();
+        return view('admin.loans.create', compact('books', 'users'));
     }
 
     /**
@@ -40,7 +48,11 @@ class AdminBooksController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $libro = Book::find($request->book_id);
+        $libro->copie = $libro->copie -1;
+        $libro->prestiti()->attach($request->user_id, ['prestato_il' => $request->day]);
+        $libro->save();
+        return redirect('/admin/loans');
     }
 
     /**
@@ -62,11 +74,6 @@ class AdminBooksController extends Controller
      */
     public function edit($id)
     {
-        $book = Book::find($id);
-        $arg = Argument::all();
-        $autori = Author::all();
-        $editori = Publisher::all();
-        return view('admin.books.update', compact('arg', 'autori', 'editori', 'book'));
     }
 
     /**
@@ -78,25 +85,7 @@ class AdminBooksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'copertina' => 'required',
-        ]);
-        $book = Book::find($id);
-        $book->titolo = $request->titolo;
-        $book->anno_pubb = $request->anno_pubb;
-        $book->isbn = $request->isbn;
-        $book->trama = $request->trama;
-        $book->copertina = $request->copertina;
-        $book->copie = $request->copie;
-        $book->argomento_id = $request->argomento;
-        $book->editore_id = $request->editore;
-        $book->autori()->detach();
-        foreach ($request->autori as $autore_id) {
-            $book->autori()->attach($autore_id);
-        }
-
-        $book->save();
-        return redirect('/admin/books');
+        //
     }
 
     /**
@@ -107,8 +96,16 @@ class AdminBooksController extends Controller
      */
     public function destroy($id)
     {
-        $book = Book::find($id);
-        $book->delete();
-        return redirect('/admin/books');
+        //
+    }
+
+    public function restituisci($id) {
+        $prestito = Prestito::find($id);
+        $libro = Book::find($prestito->book_id);
+        $prestito->restituito = date('Y-m-d');
+        $libro->copie = $libro->copie +1;
+        $libro->save();
+        $prestito->save();
+        return redirect('admin/loans');
     }
 }
